@@ -70,6 +70,7 @@ RUN \
 ADD ["user-default.png", "config/User Avatars/user-default.png"]
 ADD ["OpenAI Settings", "config/OpenAI Settings"]
 ADD ["QuickReplies", "config/QuickReplies"]
+ADD themes config/themes
 ADD secrets.json secrets.json
 # 启动设置
 ADD config.yaml config/config.yaml
@@ -77,9 +78,6 @@ ADD config.yaml config/config.yaml
 ADD settings.json config/settings.json
 # 导入角色卡
 ADD characters config/characters
-
-# 配置参数
-RUN ./auto.sh env
 
 
 # Cleanup unnecessary files
@@ -91,7 +89,7 @@ RUN \
   chmod +x "./docker-entrypoint.sh" && \
   echo "*** Convert line endings to Unix format ***" && \
   dos2unix "./docker-entrypoint.sh"
-RUN sed -i 's/# Start the server/.\/auto.sh init/g' docker-entrypoint.sh
+RUN sed -i 's/# Start the server/.\/auto.sh env \&\& .\/auto.sh init/g' docker-entrypoint.sh
 RUN chmod -R 777 ${APP_HOME}
 
 EXPOSE 8000
