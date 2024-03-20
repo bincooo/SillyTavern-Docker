@@ -70,7 +70,6 @@ RUN \
 ADD ["user-default.png", "config/User Avatars/user-default.png"]
 ADD ["OpenAI Settings", "config/OpenAI Settings"]
 ADD ["QuickReplies", "config/QuickReplies"]
-ADD themes config/themes
 ADD secrets.json secrets.json
 # 启动设置
 ADD config.yaml config/config.yaml
