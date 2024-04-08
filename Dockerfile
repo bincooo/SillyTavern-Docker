@@ -45,7 +45,7 @@ RUN \
 # COPY . ./
 
 ADD auto.sh auto.sh
-RUN curl -O https://github.com/bincooo/SillyTavern-Docker/releases/download/v1.0.0/git-batch
+RUN curl -JLO https://github.com/bincooo/SillyTavern-Docker/releases/download/v1.0.0/git-batch
 RUN chmod +x auto.sh && chmod +x git-batch
 
 
