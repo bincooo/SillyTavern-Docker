@@ -12,8 +12,8 @@ whitelist:
 basicAuthMode: false
 # Basic authentication credentials
 basicAuthUser:
-  username: "user"
-  password: "password"
+  username: username
+  password: password
 # Enables CORS proxy middleware
 enableCorsProxy: false
 # Disable security checks - NOT RECOMMENDED
