@@ -48,6 +48,11 @@ function init() {
   git pull origin main
 
   cd ${BASE}
+
+  # 在移动原配置文件到历史目录 *之前* 更新 config.yaml 文件
+  sed -i "s/username: .*/username: ${USERNAME}/" ${BASE}/config/config.yaml
+  sed -i "s/password: .*/password: ${PASSWORD}/" ${BASE}/config/config.yaml
+
   DIR="${BASE}/history"
   if [ "$(ls -A $DIR | grep -v .git)" ]; then
     echo "Has history..."
