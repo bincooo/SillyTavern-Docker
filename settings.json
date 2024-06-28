@@ -469,7 +469,7 @@
                 "runOnEdit": true,
                 "substituteRegex": false,
                 "minDepth": 2,
-                "maxDepth": null,
+                "maxDepth": null
             },
             {
                 "scriptName": "[10]六个选项过滤",

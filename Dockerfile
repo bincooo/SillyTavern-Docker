@@ -55,7 +55,7 @@ ADD secrets.json secrets.json
 # 启动设置
 ADD config.yaml config/config.yaml
 # 服务设置
-ADD settings.json data/settings.json
+ADD settings.json config/settings.json
 # 导入角色卡
 ADD characters data/default-user/characters
 

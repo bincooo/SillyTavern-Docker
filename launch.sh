@@ -32,14 +32,12 @@ function env() {
   echo "*** Edit default $RESOURCES in OpenAI Settings ***" && \
   for R in $RESOURCES; do sed -i "s#\"reverse_proxy\": \"\",#\"reverse_proxy\": \"${reverse_proxy}\",#g" "data/default-user/OpenAI Settings/$R.json"; done || true && \
   for R in $RESOURCES; do sed -i "s#\"proxy_password\": \"\",#\"proxy_password\": \"${proxy_password}\",#g" "data/default-user/OpenAI Settings/$R.json"; done || true
+  sed -i "s/\"api_key_makersuite\": \"\"/\"api_key_makersuite\": \"${api_key_makersuite}\"/g" secrets.json
   sed -i "s/\[github_secret\]/${github_secret}/g" launch.sh
   sed -i "s#\[github_project\]#${github_project}#g" launch.sh
-  if [[ ! -z "${api_key_makersuite}" ]]; then
-    sed -i "s/\"api_key_makersuite\": \"\"/\"api_key_makersuite\": \"${api_key_makersuite}\"/g" secrets.json
-  fi
 
-  sed -i "s#\[proxies_url\]#${reverse_proxy}#g" data/settings.json
-  sed -i "s/\[proxies_passwd\]/${proxy_password}/g" data/settings.json
+  sed -i "s#\[proxies_url\]#${reverse_proxy}#g" config/settings.json
+  sed -i "s/\[proxies_passwd\]/${proxy_password}/g" config/settings.json
 }
 
 function init() {
@@ -69,8 +67,12 @@ function init() {
 
   rm -rf data
   ln -s history data
+
+  cp -r config/settings.json history/default-user/settings.json
+  ln -s history/default-user/settings.json data/default-user/settings.json
+
   rm -r secrets.json
-  ln -s history/secrets.json secrets.json
+  ln -s history/default-user/secrets.json secrets.json
 
   rm -r config.yaml
   cp config/config.yaml history/config.yaml
@@ -81,7 +83,6 @@ function init() {
   echo "Init history."
   chmod -R 777 history
 
-  echo "'init history$(date "+%Y-%m-%d %H:%M:%S")'" > history/hello.txt
   nohup ./git-batch --commit 10s --name git-batch --email git-batch@github.com --push 1m -p history > access.log 2>1 &
 }
 
