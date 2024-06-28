@@ -320,6 +320,173 @@
                 "substituteRegex": false,
                 "minDepth": null,
                 "maxDepth": null
+            },
+            {
+                "scriptName": "[1]去除</结束无效提示>",
+                "findRegex": "/.*(?=</结束无效提示>)/s",
+                "replaceString": "",
+                "trimStrings": [],
+                "placement": [
+                    2,
+                    3
+                ],
+                "disabled": false,
+                "markdownOnly": true,
+                "promptOnly": true,
+                "runOnEdit": true,
+                "substituteRegex": false,
+                "minDepth": null,
+                "maxDepth": null
+            },
+            {
+                "scriptName": "[2]去除思维链",
+                "findRegex": "\\[consideration\\][\\s\\S]*?\\[/consideration\\]|\\[考虑\\][\\s\\S]*?\\[/考虑\\]|\\<consideration\\>[\\s\\S]*?\\</consideration\\>|\\[consideration\\][\\s\\S]*?\\</consideration\\>",
+                "replaceString": "",
+                "trimStrings": [],
+                "placement": [
+                    2
+                ],
+                "disabled": false,
+                "markdownOnly": true,
+                "promptOnly": true,
+                "runOnEdit": false,
+                "substituteRegex": false,
+                "minDepth": null,
+                "maxDepth": null
+            },
+            {
+                "scriptName": "[3]过滤AI中人类输出",
+                "findRegex": "\\[user-speak\\][\\s\\S]*?\\[/user-speak\\]|\\[new-user-speak\\][\\s\\S]*?\\[/new-user-speak\\]",
+                "replaceString": "",
+                "trimStrings": [],
+                "placement": [
+                    2,
+                    3
+                ],
+                "disabled": false,
+                "markdownOnly": false,
+                "promptOnly": true,
+                "runOnEdit": true,
+                "substituteRegex": false,
+                "minDepth": null,
+                "maxDepth": null
+            },
+            {
+                "scriptName": "[4]替换历史时间标识1",
+                "findRegex": "(\\[time-stamp\\])",
+                "replaceString": "[old-time-stamp]",
+                "trimStrings": [],
+                "placement": [
+                    2,
+                    3
+                ],
+                "disabled": false,
+                "markdownOnly": true,
+                "promptOnly": true,
+                "runOnEdit": true,
+                "substituteRegex": false,
+                "minDepth": 2,
+                "maxDepth": null
+            },
+            {
+                "scriptName": "[5]替换历史时间标识2",
+                "findRegex": "(\\[/time-stamp\\])",
+                "replaceString": "[/old-time-stamp]",
+                "trimStrings": [],
+                "placement": [
+                    2,
+                    3
+                ],
+                "disabled": false,
+                "markdownOnly": true,
+                "promptOnly": true,
+                "runOnEdit": true,
+                "substituteRegex": false,
+                "minDepth": 2,
+                "maxDepth": null
+            },
+            {
+                "scriptName": "[6]将旧时间标识替换新时间标识1",
+                "findRegex": "(\\[old-time-stamp\\])",
+                "replaceString": "[time-stamp]",
+                "trimStrings": [],
+                "placement": [
+                    2,
+                    3
+                ],
+                "disabled": false,
+                "markdownOnly": true,
+                "promptOnly": true,
+                "runOnEdit": true,
+                "substituteRegex": false,
+                "minDepth": null,
+                "maxDepth": 1
+            },
+            {
+                "scriptName": "[7]将旧时间标识替换新时间标识2",
+                "findRegex": "(\\[/old-time-stamp\\])",
+                "replaceString": "[/time-stamp]",
+                "trimStrings": [],
+                "placement": [
+                    2,
+                    3
+                ],
+                "disabled": false,
+                "markdownOnly": true,
+                "promptOnly": true,
+                "runOnEdit": true,
+                "substituteRegex": false,
+                "minDepth": null,
+                "maxDepth": 1
+            },
+            {
+                "scriptName": "[8]新的用户消息添加首尾标识",
+                "findRegex": "^(.*)$",
+                "replaceString": "[new-user-speak]\n<!-- 接下来 {{user}} 尝试: --> --> $1\n[/new-user-speak]",
+                "trimStrings": [],
+                "placement": [
+                    1
+                ],
+                "disabled": false,
+                "markdownOnly": true,
+                "promptOnly": true,
+                "runOnEdit": true,
+                "substituteRegex": false,
+                "minDepth": null,
+                "maxDepth": 1
+            },
+            {
+                "scriptName": "[9]历史用户消息添加首尾标识",
+                "findRegex": "^(.*)$",
+                "replaceString": "[old-user-speak]\n<历史{{user}}发言： $1 >\n[/old-user-speak]",
+                "trimStrings": [],
+                "placement": [
+                    1
+                ],
+                "disabled": true,
+                "markdownOnly": true,
+                "promptOnly": true,
+                "runOnEdit": true,
+                "substituteRegex": false,
+                "minDepth": 2,
+                "maxDepth": null,
+            },
+            {
+                "scriptName": "[10]六个选项过滤",
+                "findRegex": "\\[option\\][\\s\\S]*?\\[/option\\]|\\[选项\\][\\s\\S]*?\\[/选项\\]",
+                "replaceString": "",
+                "trimStrings": [],
+                "placement": [
+                    2,
+                    3
+                ],
+                "disabled": false,
+                "markdownOnly": false,
+                "promptOnly": true,
+                "runOnEdit": true,
+                "substituteRegex": false,
+                "minDepth": null,
+                "maxDepth": null
             }
         ],
         "tts": {
@@ -714,5 +881,15 @@
         "assistant_prefill": "",
         "use_ai21_tokenizer": false,
         "exclude_assistant": false
+    },
+    "proxies": [
+        {
+            "name": "None",
+            "url": "[proxies_url]",
+            "password": "[proxies_passwd]"
+        }
+    ],
+    "selected_proxy": {
+        "name": "None"
     }
 }

@@ -36,7 +36,7 @@ ENV github_project ""
 
 # Install app dependencies
 # COPY package*.json post-install.js ./
-RUN git clone https://github.com/SillyTavern/SillyTavern.git --branch 1.11.7 .
+RUN git clone https://github.com/SillyTavern/SillyTavern.git --branch 1.12.1 .
 RUN \
   echo "*** Install npm packages ***" && \
   npm install && npm cache clean --force
@@ -44,40 +44,20 @@ RUN \
 # Bundle app source
 # COPY . ./
 
-ADD auto.sh auto.sh
-RUN curl -JLO https://github.com/bincooo/SillyTavern-Docker/releases/download/v1.0.0/git-batch
-RUN chmod +x auto.sh && chmod +x git-batch
+ADD launch.sh launch.sh
+RUN curl -JLO  https://github.com/bincooo/SillyTavern-Docker/releases/download/v1.0.0/git-batch
+RUN chmod +x launch.sh && chmod +x git-batch && ./git-batch -h
 
-
-# Copy default chats, characters and user avatars to <folder>.default folder
-RUN \
-  IFS="," RESOURCES="assets,backgrounds,user,context,instruct,QuickReplies,movingUI,themes,characters,chats,groups,group chats,User Avatars,worlds,OpenAI Settings,NovelAI Settings,KoboldAI Settings,TextGen Settings" && \
-  \
-  echo "*** Store default $RESOURCES in <folder>.default ***" && \
-  for R in $RESOURCES; do mv "public/$R" "public/$R.default"; done || true && \
-  \
-  echo "*** Create symbolic links to config directory ***" && \
-  for R in $RESOURCES; do ln -s "../config/$R" "public/$R"; done || true && \
-  \
-  rm -f "config.yaml" "public/settings.json" || true && \
-  ln -s "./config/config.yaml" "config.yaml" || true && \
-  ln -s "../config/settings.json" "public/settings.json" || true && \
-  mkdir "config" || true && \
-  mkdir -p "public/user" || true
-  #\
-  #for R in $RESOURCES; do mkdir "config/$R"; done || true
-
-ADD ["user-default.png", "config/User Avatars/user-default.png"]
-ADD ["OpenAI Settings", "config/OpenAI Settings"]
-ADD ["QuickReplies", "config/QuickReplies"]
+ADD ["user-default.png", "data/default-user/User Avatars/user-default.png"]
+ADD ["OpenAI Settings", "data/default-user/OpenAI Settings"]
+ADD ["QuickReplies", "data/default-user/QuickReplies"]
 ADD secrets.json secrets.json
 # 启动设置
 ADD config.yaml config/config.yaml
 # 服务设置
-ADD settings.json config/settings.json
+ADD settings.json data/settings.json
 # 导入角色卡
-ADD characters config/characters
-
+ADD characters data/default-user/characters
 
 # Cleanup unnecessary files
 RUN \
@@ -88,7 +68,7 @@ RUN \
   chmod +x "./docker-entrypoint.sh" && \
   echo "*** Convert line endings to Unix format ***" && \
   dos2unix "./docker-entrypoint.sh"
-RUN sed -i 's/# Start the server/.\/auto.sh env \&\& .\/auto.sh init/g' docker-entrypoint.sh
+RUN sed -i 's/# Start the server/.\/launch.sh env \&\& .\/launch.sh init/g' docker-entrypoint.sh
 RUN chmod -R 777 ${APP_HOME}
 
 EXPOSE 8000

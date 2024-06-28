@@ -22,17 +22,24 @@ function env() {
   echo "api_key_makersuite = $api_key_makersuite"
   echo "github_secret = $github_secret"
   echo "github_project = $github_project"
+  echo "USERNAME = ${USERNAME}"
+  echo "PASSWORD = ${PASSWORD}"
   echo
   echo
 
-  IFS="," RESOURCES="新版主动,ny预设1.6.0,对话破限,小说文笔,新版主动,过激行为,鱼骨破限v3" && \
+  IFS="," RESOURCES="糖水galV1.9.0g,糖水otomeV1.9.0g,修改版 V1.4.8_KaruKaru,修改版 V1.4.9_KaruKaru" && \
   \
   echo "*** Edit default $RESOURCES in OpenAI Settings ***" && \
-  for R in $RESOURCES; do sed -i "s#\"reverse_proxy\": \"\",#\"reverse_proxy\": \"${reverse_proxy}\",#g" "config/OpenAI Settings/$R.json"; done || true && \
-  for R in $RESOURCES; do sed -i "s#\"proxy_password\": \"\",#\"proxy_password\": \"${proxy_password}\",#g" "config/OpenAI Settings/$R.json"; done || true
-  sed -i "s/\"api_key_makersuite\": \"\"/\"api_key_makersuite\": \"${api_key_makersuite}\"/g" secrets.json
-  sed -i "s/\[github_secret\]/${github_secret}/g" auto.sh
-  sed -i "s#\[github_project\]#${github_project}#g" auto.sh
+  for R in $RESOURCES; do sed -i "s#\"reverse_proxy\": \"\",#\"reverse_proxy\": \"${reverse_proxy}\",#g" "data/default-user/OpenAI Settings/$R.json"; done || true && \
+  for R in $RESOURCES; do sed -i "s#\"proxy_password\": \"\",#\"proxy_password\": \"${proxy_password}\",#g" "data/default-user/OpenAI Settings/$R.json"; done || true
+  sed -i "s/\[github_secret\]/${github_secret}/g" launch.sh
+  sed -i "s#\[github_project\]#${github_project}#g" launch.sh
+  if [[ ! -z "${api_key_makersuite}" ]]; then
+    sed -i "s/\"api_key_makersuite\": \"\"/\"api_key_makersuite\": \"${api_key_makersuite}\"/g" secrets.json
+  fi
+
+  sed -i "s#\[proxies_url\]#${reverse_proxy}#g" data/settings.json
+  sed -i "s/\[proxies_passwd\]/${proxy_password}/g" data/settings.json
 }
 
 function init() {
@@ -51,23 +58,26 @@ function init() {
 
   cd ${BASE}
 
-  # 在移动原配置文件到历史目录 *之前* 更新 config.yaml 文件
-  sed -i "s/username: .*/username: ${USERNAME}/" ${BASE}/config/config.yaml
-  sed -i "s/password: .*/password: ${PASSWORD}/" ${BASE}/config/config.yaml
-
   DIR="${BASE}/history"
   if [ "$(ls -A $DIR | grep -v .git)" ]; then
     echo "Has history..."
   else
     echo "Empty history..."
-    cp -r config/* history/
+    cp -r data/* history/
     cp -r secrets.json history/secrets.json
   fi
 
-  rm -rf config
-  ln -s history config
+  rm -rf data
+  ln -s history data
   rm -r secrets.json
   ln -s history/secrets.json secrets.json
+
+  rm -r config.yaml
+  cp config/config.yaml history/config.yaml
+  ln -s history/config.yaml config.yaml
+  sed -i "s/username: .*/username: \"${USERNAME}\"/" ${BASE}/config.yaml
+  sed -i "s/password: .*/password: \"${PASSWORD}\"/" ${BASE}/config.yaml
+  cat config.yaml
   echo "Init history."
   chmod -R 777 history
 
