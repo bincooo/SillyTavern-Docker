@@ -15,6 +15,7 @@ Check out the configuration reference at https://huggingface.co/docs/hub/spaces-
 
 
 如果你没有替换README.md，则需要自己修改端口：
+```
 ---
 title: xxx
 emoji: 🐨
@@ -24,3 +25,4 @@ sdk: docker
 pinned: false
 app_port: 8000 <-- 这里配置，自行对比差异
 ---
+```
