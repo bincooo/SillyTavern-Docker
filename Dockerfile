@@ -12,6 +12,9 @@ ENTRYPOINT [ "tini", "--" ]
 # Create app directory
 WORKDIR ${APP_HOME}
 
+# Set NODE_ENV to production
+ENV NODE_ENV=production
+
 # Env
 # 是否远程获取下面的参数 是个链接，返回一个json；执行完后关闭这个链接即可保密
 # 返回内容:
@@ -36,7 +39,7 @@ ENV github_project ""
 
 # Install app dependencies
 # COPY package*.json post-install.js ./
-RUN git clone https://github.com/SillyTavern/SillyTavern.git --branch 1.12.3 .
+RUN git clone https://github.com/SillyTavern/SillyTavern.git --branch 1.12.7 .
 RUN \
   echo "*** Install npm packages ***" && \
   npm install && npm cache clean --force
@@ -48,16 +51,15 @@ ADD launch.sh launch.sh
 RUN curl -JLO  https://github.com/bincooo/SillyTavern-Docker/releases/download/v1.0.0/git-batch
 RUN chmod +x launch.sh && chmod +x git-batch && ./git-batch -h
 
-ADD ["user-default.png", "data/default-user/User Avatars/user-default.png"]
-ADD ["OpenAI Settings", "data/default-user/OpenAI Settings"]
-ADD ["QuickReplies", "data/default-user/QuickReplies"]
-ADD secrets.json secrets.json
-# 启动设置
-ADD config.yaml config/config.yaml
-# 服务设置
-ADD settings.json config/settings.json
-# 导入角色卡
-ADD characters data/default-user/characters
+RUN \
+  echo "*** Install npm packages ***" && \
+  npm i --no-audit --no-fund --loglevel=error --no-progress --omit=dev && npm cache clean --force
+
+# Copy default chats, characters and user avatars to <folder>.default folder
+RUN \
+  rm -f "config.yaml" || true && \
+  ln -s "./config/config.yaml" "config.yaml" || true && \
+  mkdir "config" || true
 
 # Cleanup unnecessary files
 RUN \
