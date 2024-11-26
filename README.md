@@ -11,3 +11,4 @@ app_port: 8000
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
 
 使用前请仔细阅读说明：[help](help.md)
+<img width="1162" alt="Screenshot 2024-11-26 at 19 33 19" src="https://github.com/user-attachments/assets/db412195-2c6c-414b-bd9b-fcfa57ea4374">
