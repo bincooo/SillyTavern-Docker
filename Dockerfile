@@ -39,7 +39,7 @@ ENV github_project ""
 
 # Install app dependencies
 # COPY package*.json post-install.js ./
-RUN git clone https://github.com/SillyTavern/SillyTavern.git --branch 1.12.7 .
+RUN git clone https://github.com/SillyTavern/SillyTavern.git --branch 1.12.11 .
 RUN \
   echo "*** Install npm packages ***" && \
   npm install && npm cache clean --force
